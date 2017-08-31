@@ -1,0 +1,58 @@
+* {
+  box-sizing: border-box;
+}
+body {
+  background: url('https://unsplash.it/640/480?image=960');
+  background-size: cover;
+}
+.container {
+  mim-width: 320px;
+  min-height: 100vh;
+  padding: 5%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.weather {
+  max-width: 450px;
+  width: 50vw;
+  min-height: 50vh;
+  padding: .25em .5em;
+  border: 8px groove rgba(255,255,255, .8);
+  border-radius: 16px;
+  background: rgba(255,255,255, .7);
+}
+
+.weather-icon {
+  display: block;
+  width: 100px;
+  height: auto;
+  margin: 1em auto;
+}
+
+.weather-info:empty:before {
+  content: '';
+  display: block;
+  width: 100px;
+  height: 100px;
+  margin: 20px auto;
+  border: 8px solid rgba(0,0,0, .5);
+  border-left-color: transparent;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: 1s linear infinite normal rotation;
+}
+
+.temperature {
+  font-size: 250%;
+  line-height: 1.2;
+}
+
+.temperature .temp-unit {
+  font-size: .9em;
+}
+
+@keyframes rotation {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }  
+}
