@@ -50,7 +50,7 @@ function getLocationByIp () {
 * Get Promice with weather info by location
 */
 async function getWeatherInfo(lat, long) {
-return new Promise((resolve, reject) => {
+	return new Promise((resolve, reject) => {
 	requestJSON('GET',
                 `https://fcc-weather-api.glitch.me/api/current?lat=${lat}&lon=${long}`,
                 resolve);
@@ -69,20 +69,36 @@ function requestJSON (method, url, callback) {
     xhr.send();
 }
 
-async function show() {
+	const currentUnit = { 
+	     temp : 'celsius',
+	      press : 'hPa',
+		  update: function (param, newValue) {
+			this[param] = newValue;
+			  localStorage.setItem(`fcc_local_weather_${param}`, newValue)
+		  },
+		load: function () {
+			this.temp = localStorage.getItem('fcc_local_weather_temp') || 'celsius';
+			this.press = localStorage.getItem('fcc_local_weather_press') || 'hPa';
+		}
+	};
+
+
+async function App () {
+/*	const currentUnit = { 
+	     temp : 'celsius',
+	      press : 'hPa';
+		  update: function (param, newValue) {
+			this[param] = newValue
+		  }
+	}; */
+	currentUnit.load();
+
 	try {
 		const pos = await getLocation();
 		const weather = await getWeatherInfo(pos.latitude, pos.longitude);
 		const weatherBlock = document.querySelector('#weather');
-		let weatherInfo = weatherBlock.querySelector('.weather-info');
-  
-		weatherInfo.innerHTML = template(weather);
-  
-		setParameter('temp', weatherInfo, Unit.getParam('temp',currentUnit.temp).convert(weather.main.temp), Unit.getParam('temp',currentUnit.temp).mark);
-  
-		setParameter('press', weatherInfo, Unit.getParam('press',currentUnit.press).convert(weather.main.pressure), Unit.getParam('press',currentUnit.press).mark);
 
-		weatherBlock.appendChild(weatherInfo);
+		View.render(weatherBlock, weather, currentUnit, template);
     
 		weatherBlock.addEventListener('click', (e) => {
 			values = {
@@ -93,9 +109,9 @@ async function show() {
 				const param = e.target.dataset.parameter;
 				const units = Unit.getUnitsKeys(param);
 				let unitIndex = units.indexOf(currentUnit[param]);
-				currentUnit[param] = units[(unitIndex + 1) % units.length];
+				currentUnit.update(param, units[(unitIndex + 1) % units.length]);
 				const currentParam = Unit.getParam(param, currentUnit[param]);
-				setParameter(param, weatherBlock, currentParam.convert(values[param]), currentParam.mark)
+				View.setParameter(param, weatherBlock, currentParam.convert(values[param]), currentParam.mark)
 			}
 		});
 	} catch (e) {
@@ -104,18 +120,27 @@ async function show() {
 	}
 }
   
-function setParameter(parameter, parent, temp, unitMark) {
-  parent.querySelector(`.${parameter}-value`).innerHTML = (temp).toFixed(2);
-    parent.querySelector(`.${parameter}-unit`).innerHTML = unitMark;
+
+function View () {}
+
+View.setParameter = function (parameter, parent, temp, unitMark) {
+	parent.querySelector(`.${parameter}-value`).innerHTML = (temp).toFixed(1);
+	parent.querySelector(`.${parameter}-unit`).innerHTML = unitMark;
 }
+
+View.render = function (element, data, current, templateFunc) {
+		let weatherInfo = element.querySelector('.weather-info');
+		weatherInfo.innerHTML = templateFunc(data);
   
+		View.setParameter('temp', weatherInfo, Unit.getParam('temp',current.temp).convert(data.main.temp), Unit.getParam('temp',current.temp).mark);
+  
+		View.setParameter('press', weatherInfo, Unit.getParam('press',current.press).convert(data.main.pressure), Unit.getParam('press',current.press).mark);
 
-let currentUnit = { 
-  temp: 'celsius',
-  press: 'hPa'
-};
+		element.appendChild(weatherInfo);
 
-show();
+}
+
+App();
   
 function template(data) {
   return `
