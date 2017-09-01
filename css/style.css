@@ -72,7 +72,7 @@ h1, h2 { margin: 0 0 .25em}
 }
 
 .secondary-info [data-parametr]{
-	.9em
+	font-size: .9em;
 }
 
 @keyframes rotation {
