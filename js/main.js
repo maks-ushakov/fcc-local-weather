@@ -71,16 +71,16 @@ function requestJSON (method, url, callback) {
 
 async function show() {
 	try {
-		let pos = await getLocation();
-		let weather = await getWeatherInfo(pos.latitude, pos.longitude);
-		let weatherBlock = document.querySelector('#weather');
+		const pos = await getLocation();
+		const weather = await getWeatherInfo(pos.latitude, pos.longitude);
+		const weatherBlock = document.querySelector('#weather');
 		let weatherInfo = weatherBlock.querySelector('.weather-info');
   
 		weatherInfo.innerHTML = template(weather);
   
-		setParameter('temp', weatherInfo, Unit.temp[currentUnit.temp].convert(weather.main.temp), Unit.temp[currentUnit.temp].mark);
+		setParameter('temp', weatherInfo, Unit.getParam('temp',currentUnit.temp).convert(weather.main.temp), Unit.getParam('temp',currentUnit.temp).mark);
   
-		setParameter('press', weatherInfo, Unit.press[currentUnit.press].convert(weather.main.pressure), Unit.press[currentUnit.press].mark);
+		setParameter('press', weatherInfo, Unit.getParam('press',currentUnit.press).convert(weather.main.pressure), Unit.getParam('press',currentUnit.press).mark);
 
 		weatherBlock.appendChild(weatherInfo);
     
@@ -90,10 +90,12 @@ async function show() {
 				press: weather.main.pressure
 			}
 			if(e.target.dataset.action === 'toggle-unit') {
-				let param = e.target.dataset.parameter;
-				let unitIndex = units[param].indexOf(currentUnit[param]);
-				currentUnit[param] = units[param][(unitIndex + 1) % units[param].length];
-				setParameter(param, weatherBlock, Unit[param][currentUnit[param]].convert(values[param]), Unit[param][currentUnit[param]].mark)
+				const param = e.target.dataset.parameter;
+				const units = Unit.getUnitsKeys(param);
+				let unitIndex = units.indexOf(currentUnit[param]);
+				currentUnit[param] = units[(unitIndex + 1) % units.length];
+				const currentParam = Unit.getParam(param, currentUnit[param]);
+				setParameter(param, weatherBlock, currentParam.convert(values[param]), currentParam.mark)
 			}
 		});
 	} catch (e) {
@@ -107,44 +109,10 @@ function setParameter(parameter, parent, temp, unitMark) {
     parent.querySelector(`.${parameter}-unit`).innerHTML = unitMark;
 }
   
-let units = {temp: ['celsius', 'fahrenheit', 'kelvin'],
-             press: ['hPa', 'mmHg', 'bar']
-};
 
 let currentUnit = { 
-  temp: units.temp[0],
-  press: units.press[0]
-};
-
-let Unit = {
-  temp: {
-  celsius: {
-    mark: 'C',
-    convert: (temp) => temp
-  },
-  fahrenheit: {
-    mark: 'F',
-    convert: (temp) => temp * 1.8 + 32
-  },
-  kelvin: {
-    mark: 'K',
-    convert: (temp) => temp + 273.15
-  }
-  },
-  press: {
-    hPa : {
-      mark: 'hPa',
-      convert: (press) => press,
-    },
-    bar : {
-      mark: 'bars',
-      convert: (press) => press / 1000,
-    },
-    mmHg : {
-      mark: 'mmHg',
-      convert: (press) => press / 1.3332239
-    }
-  }
+  temp: 'celsius',
+  press: 'hPa'
 };
 
 show();
