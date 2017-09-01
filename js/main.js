@@ -123,18 +123,22 @@ function template(data) {
     <span class="city">${data.name}</span>,
     <span class="country">${data.sys.country}</span>
   </h2>
-  <image class="weather-icon" src="${data.weather[0].icon}" alt="${data.weather[0].description}" >
-<span class="cloud-desc">${data.weather[0].main}</span>
-  <div class="temperature">
-   <span class="temp-value"></span>
-   <button class="temp-unit" data-action="toggle-unit" data-parameter="temp"></button>
+  <div class="weather-main">
+      <div class="weather-status">
+        <span class="cloud-desc">${data.weather[0].main}</span>
+        <image class="weather-icon" src="${data.weather[0].icon}" alt="${data.weather[0].description}" >
+      </div>
+      <div class="temperature">
+         <span class="temp-value"></span>
+         <button class="temp-unit" data-action="toggle-unit" data-parameter="temp"></button>
+      </div>
  </div>
- <div class="pressure">
+ <div class="secondary-info">
    <span>Pressure:</span>
    <span class="press-value"></span>
    <button class="press-unit" data-action="toggle-unit" data-parameter="press"></button>
  </div>
- <div class="wind">
+ <div class="secondary-info">
    <span>Wind:</span>
    <span class="wind-speed">${data.wind.speed} m/s</span>,
    <span class="wind-direction">${data.wind.deg}deg</span>

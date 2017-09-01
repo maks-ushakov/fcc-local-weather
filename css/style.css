@@ -4,19 +4,22 @@
 body {
   background: url('https://unsplash.it/640/480?image=960');
   background-size: cover;
+  margin: 0;
 }
+
+h1, h2 { margin: 0 0 .25em}
+
 .container {
   mim-width: 320px;
   min-height: 100vh;
-  padding: 5%;
+  padding: 1% 5%;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 .weather {
   max-width: 450px;
-  width: 50vw;
-  min-height: 50vh;
+  width: 100%;
   padding: .25em .5em;
   border: 8px groove rgba(255,255,255, .8);
   border-radius: 16px;
@@ -24,10 +27,9 @@ body {
 }
 
 .weather-icon {
-  display: block;
-  width: 100px;
+  display: inline-block;
+  width: 80px;
   height: auto;
-  margin: 1em auto;
 }
 
 .weather-info:empty:before {
@@ -43,13 +45,34 @@ body {
   animation: 1s linear infinite normal rotation;
 }
 
+.weather-main {
+	display: flex;
+	justify-content: space-between;
+	text-align: center;
+}
+
+.cloud-desc {
+	display: block
+}
 .temperature {
-  font-size: 250%;
+  font-size: 200%;
   line-height: 1.2;
+  display: flex;
+  align-items: center;
 }
 
 .temperature .temp-unit {
   font-size: .9em;
+}
+
+.secondary-info {
+	font-size: 110%;
+	line-height: 1.5;
+	margin: 0 0 .25em;
+}
+
+.secondary-info [data-parametr]{
+	.9em
 }
 
 @keyframes rotation {
