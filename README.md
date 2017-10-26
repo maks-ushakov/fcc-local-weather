@@ -1,13 +1,13 @@
-#Show the Local Weather
+# Show the Local Weather
 
 Study project. Free Code Camp. result https://codepen.io/projmaks/full/dzQagx/
 
 
-##Objective
+## Objective
 
 Build a CodePen.io app that is functionally similar to this: http://codepen.io/FreeCodeCamp/full/bELRjV.
 
-##User Stories
+## User Stories
 
 User Story: I can see the weather in my current location.
 
@@ -15,7 +15,7 @@ User Story: I can see a different icon or background image (e.g. snowy mountain,
 
 User Story: I can push a button to toggle between Fahrenheit and Celsius.
 
-##Technologies
+## Technologies
 
 * AJAX
 * Promise  
@@ -24,7 +24,8 @@ User Story: I can push a button to toggle between Fahrenheit and Celsius.
 * GeoLocation
 
 
-##Project links
+## Project links
+
 [FreeCodeCamp challenge](https://www.freecodecamp.org/challenges/show-the-local-weather)
 
 [Codepen Result](https://codepen.io/projmaks/full/dzQagx/)
